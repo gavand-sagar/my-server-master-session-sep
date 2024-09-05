@@ -1,4 +1,5 @@
 import express from 'express';
+import { MongoClient } from 'mongodb';
 
 const app = express();
 app.use(express.json()) // middleware need to add
@@ -12,19 +13,33 @@ app.get("/what-is-your-name", (req, res) => {
     res.send("Hey, My name is Amit!")
 })
 
-let categories = []
 
-app.get("/get-all-categories", (req, res) => {
-    res.json(categories)
+
+
+
+app.get("/get-all-categories", async (req, res) => {
+
+    let client = new MongoClient("mongodb://127.0.0.1:27017")
+    let connection = await client.connect();
+    let db = connection.db("lucifer");
+
+    // actual db operation 
+    /// fetch all the records
+    let data = await db.collection('categories').find().toArray();
+
+    return res.json(data)
 })
 
-app.post("/create-category", (req, res) => {
-    //someone from client side will send the object to server
-    // where to find it?
+app.post("/create-category", async (req, res) => {
+    let client = new MongoClient("mongodb://127.0.0.1:27017")
+    let connection = await client.connect();
+    let db = connection.db("lucifer");
 
-    // in the req.body
-    categories.push(req.body) // req.body is  null here
-    res.json(categories)
+    //actual db operation
+    // create a new record in categories collection
+    let result = await db.collection('categories').insertOne(req.body);
+    return res.json(result)
+
 })
 
 
