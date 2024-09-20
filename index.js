@@ -4,10 +4,11 @@ import { body } from 'express-validator';
 import jwt from 'jsonwebtoken';
 import { mySecret } from './constants.js';
 import { getDataBase } from './db-functions.js';
+import cors from 'cors'
 
 const app = express();
 app.use(express.json()) // middleware need to add
-
+app.use(cors())
 
 app.get("/", async (req, res) => {
     return res.send("This app works")
