@@ -9,6 +9,11 @@ const app = express();
 app.use(express.json()) // middleware need to add
 
 
+app.get("/", async (req, res) => {    
+    return res.send("This app works")
+})
+
+
 app.get("/get-all-products", authenticate, async (req, res) => {
     let db = await getDataBase();
     let data = await db.collection('products').find().toArray();
@@ -98,6 +103,6 @@ app.post("/signup",
 
 
 
-app.listen(4002, () => {
+app.listen(process.env.PORT || 4002, () => {
     console.log("Listening...")
 })
