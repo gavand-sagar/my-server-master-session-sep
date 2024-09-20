@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json()) // middleware need to add
 
 
-app.get("/", async (req, res) => {    
+app.get("/", async (req, res) => {
     return res.send("This app works")
 })
 
@@ -21,7 +21,7 @@ app.get("/get-all-products", authenticate, async (req, res) => {
 })
 
 
-app.get("/get-all-categories", authenticate, async (req, res) => {
+app.get("/get-all-categories", async (req, res) => {
     let db = await getDataBase();
     // actual db operation 
     /// fetch all the records
@@ -34,8 +34,8 @@ app.post("/create-category",
         .isString()
         .isLength({ min: 3, max: 30 })
         .withMessage("Category name must be 3-30 charectors long"),
-    validateBody,
-    authenticate, async (req, res) => {
+    validateBody
+    , async (req, res) => {
 
         let db = await getDataBase();
         //actual db operation
